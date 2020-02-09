@@ -44,10 +44,12 @@ import { filterImageFromURL, deleteLocalFiles, validateUrl } from "./util/util";
     }
     try {
       const file = await filterImageFromURL(image_url);
-      return res.status(200).sendFile(file);
+      return res.status(200).sendFile(file, ()=>{
+        deleteLocalFiles([file])
+      });
     } catch (err) {
-      console.error(err);
-      return res.status(500);
+      console.error(err)
+      return res.sendStatus(422)
     }
   });
 
